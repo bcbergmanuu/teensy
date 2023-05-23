@@ -26,7 +26,6 @@ SOFTWARE.
 
 // Pins for controlling stepper motor.
 const uint8_t SPI_CS = 5; // CS pin in SPI mode
-const uint8_t SPI_DRV_ENN = 8;  // DRV_ENN pin in SPI mode
 
 //Use default SPI peripheral and SPI settings.
 TMC5160_SPI motor = TMC5160_SPI(SPI_CS);
@@ -76,9 +75,6 @@ void setup()
   // USB/debug serial coms
   Serial.begin(9600); // 115200
 
-  pinMode(SPI_DRV_ENN, OUTPUT); 
-  digitalWrite(SPI_DRV_ENN, LOW); // Active low
-
   // This sets the motor & driver parameters /!\ run the configWizard for your driver and motor for fine tuning !
   TMC5160::PowerStageParameters powerStageParams; // defaults.
   TMC5160::MotorParameters motorParams;
@@ -95,6 +91,7 @@ void setup()
 
   // Setup for glasses.
   pinMode(pinGlasses, OUTPUT);
+  digitalWrite(pinGlasses, HIGH);
 
   // Setup for rotary encoder.
   pinMode(pinA, INPUT_PULLUP);
@@ -174,10 +171,10 @@ void loop()
         break;
       
       case 'g': // Shutter glasses.
-        if(receivedCode == 'o') {
+        if(receivedCode == 'c') {
           digitalWrite(pinGlasses, LOW);
           glasses = !glasses;
-        } else if(receivedCode == 'c') {
+        } else if(receivedCode == 'o') {
           digitalWrite(pinGlasses, HIGH);
           glasses = !glasses;
         }
